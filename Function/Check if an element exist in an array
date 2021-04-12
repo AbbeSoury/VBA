@@ -1,0 +1,7 @@
+Public Function Existe(table, elem) As Boolean
+'fonction qui permet de vérifier l'existance d'un élément dans une liste et renvoie "true" le cas échéant'
+    Existe = False
+    For i = LBound(table) To UBound(table)
+       If table(i) = elem Then Existe = True
+    Next
+End Function
