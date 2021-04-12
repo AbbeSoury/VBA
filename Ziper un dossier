@@ -1,0 +1,13 @@
+Sub toZIP()
+
+  Dim wsh As Object
+  Set wsh = VBA.CreateObject("WScript.Shell")
+  Dim waitOnReturn As Boolean: waitOnReturn = True
+  Dim windowStyle As Integer: windowStyle = 1
+  
+  outputfolder = Environ("USERPROFILE") & "\Downloads\" & "run_param_" & Format(Date, "dd_mm_yy")
+
+  invite = "powershell Compress-Archive " & outputfolder & "\*.* " & outputfolder & ".zip"
+  wsh.Run invite, windowStyle, waitOnReturn
+
+End Sub
