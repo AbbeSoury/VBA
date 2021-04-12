@@ -1,0 +1,42 @@
+'In this macro we will use powershell and VBA
+'Microsoft Powershell is more powerfull than VBA for conversion
+
+Sub conversiontoUNIX()
+
+  Dim outputTextFile As Object, FSO As New Scripting.FileSystemObject, wsh As Object, file As String, listfichiers As Variant, outputfolder As String, replace As String
+  Dim waitOnReturn As Boolean: waitOnReturn = True
+  Dim windowStyle As Integer: windowStyle = 1
+  
+  Set wsh = VBA.CreateObject("WScript.Shell")
+
+  outputfolder = Environ("USERPROFILE") & "\Downloads\" & "run_param_" & Format(Date, "dd_mm_yy")
+  listfichiers = listfiles(outputfolder)
+  Txt = ""
+
+  For filx = LBound(listfichiers) To UBound(listfichiers)
+      file = outputfolder & "\" & listfichiers(filx)
+
+      Txt = vbCrLf & _
+          "$file = " & "'" & file & "'" & vbCrLf & _
+          "(Get-Content $file) | Out-File -Encoding ASCII $file" & vbCrLf & _
+          "((Get-Content $file) -join ""`n"") + ""`n"" | Set-Content -NoNewline $file" & vbCrLf & _
+          Txt
+
+  Next filx
+
+  Set outputTextFile = FSO.CreateTextFile(outputfolder & "\script.txt", True)
+
+  outputTextFile.WriteLine Txt
+  outputTextFile.Close
+  Set outputTextFile = Nothing
+  Set FSO = Nothing
+
+  Name outputfolder & "\script.txt" As outputfolder & "\script.ps1"
+
+  x = Shell("POWERSHELL.exe " & outputfolder & "\script.ps1", 1)
+
+  Application.Wait (Now + TimeValue("00:00:05"))
+
+  Kill (outputfolder & "\script.ps1")
+
+End Sub
