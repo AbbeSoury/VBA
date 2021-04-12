@@ -1,0 +1,15 @@
+Sub MoveFiles()
+
+    Dim FSO As Object
+    Dim SourceFileName As String, DestinFileName As String, outputfolder As String
+
+    Set FSO = CreateObject("Scripting.Filesystemobject")
+    outputfolder = Environ("USERPROFILE") & "\Downloads\" & "run_param_" & Format(Date, "dd_mm_yy")
+    SourceFileName = outputfolder & ".zip"
+    DestinFileName = "pathtomove"
+
+    FSO.MoveFile Source:=SourceFileName, Destination:=DestinFileName
+
+    MsgBox (SourceFileName + " Moved to " + DestinFileName)
+    
+End Sub
